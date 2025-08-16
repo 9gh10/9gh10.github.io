@@ -22,7 +22,7 @@ let nextObstacleSpawnTime = 0;
 
 // 45 km/h を ピクセル/秒 に変換 (1m = 10px と仮定)
 // 45 km/h = 12.5 m/s = 125 px/s
-const GAME_SPEED_PX_PER_SEC = 125;
+const GAME_SPEED_PX_PER_SEC = 200;
 
 let distance = 0; // 走行距離 (メートル)
 let gameOver = false;
@@ -154,11 +154,9 @@ function resetGame() {
 
 // --- メインループ --- //
 function gameLoop(timestamp) {
-    if (gameOver) {
-        drawGameOver();
-        return;
+    if (!lastTime) { // lastTimeが0の場合の初期化
+        lastTime = timestamp;
     }
-
     const deltaTime = timestamp - lastTime;
     lastTime = timestamp;
 
@@ -168,16 +166,26 @@ function gameLoop(timestamp) {
     // 更新
     updatePlayer(deltaTime);
     updateObstacles(deltaTime);
-    updateDistance(deltaTime);
+    if (!gameOver) {
+        updateDistance(deltaTime);
+    }
 
     // 描画
     drawBackground();
     drawPlayer();
     drawObstacles();
-    drawScore();
 
     // 衝突判定
     checkCollision();
+
+    // ゲーム状態に応じた描画
+    if (gameOver) {
+        drawGameOver();
+        return; // ゲームオーバーならここで処理終了
+    }
+
+    // スコア描画
+    drawScore();
 
     // 障害物生成
     if (Date.now() > nextObstacleSpawnTime) {
@@ -200,11 +208,19 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// ゲームオーバー画面でクリックされたらリスタート
-canvas.addEventListener('click', () => {
+// クリックまたはタップでジャンプ/リスタート
+function handleInteraction() {
     if (gameOver) {
         resetGame();
+    } else {
+        jump();
     }
+}
+
+canvas.addEventListener('click', handleInteraction);
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // スクロールなどのデフォルト動作を防止
+    handleInteraction();
 });
 
 // ゲーム開始
