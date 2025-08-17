@@ -1,17 +1,19 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const player = document.getElementById("player");
+
+const playerimg = new Image();
+playerimg.src = './player.png';
 
 // ゲーム設定
-const PLAYER_WIDTH = 50;
-const PLAYER_HEIGHT = 50;
-const PLAYER_COLOR = 'red';
-const PLAYER_X = canvas.width * 2 / 5;
+const PLAYER_WIDTH = 30;
+const PLAYER_HEIGHT = 100;
+//const PLAYER_COLOR = 'red';
+const PLAYER_X = canvas.width / 4 + 30;
 let PLAYER_Y = canvas.height - PLAYER_HEIGHT;
 let playerVelocityY = 0;
 
 const GRAVITY = 0.8;
-const JUMP_POWER = -20;
+const JUMP_POWER = -18;
 let isJumping = false;
 
 const OBSTACLE_WIDTH = 20;
@@ -33,7 +35,7 @@ let lastTime = 0;
 function drawPlayer() {
     //ctx.fillStyle = PLAYER_COLOR;
     //ctx.fillRect(PLAYER_X, PLAYER_Y, PLAYER_WIDTH, PLAYER_HEIGHT);
-    ctx.drawImage(player, PLAYER_X, PLAYER_Y);
+    ctx.drawImage(playerimg, PLAYER_X - 30, PLAYER_Y);
 }
 
 function updatePlayer(deltaTime) {
@@ -123,7 +125,7 @@ function updateDistance(deltaTime) {
 function drawScore() {
     ctx.fillStyle = 'black';
     ctx.font = '20px Arial';
-    ctx.fillText(`距離: ${Math.floor(distance)} m`, 10, 30);
+    ctx.fillText(`距離: ${Math.floor(distance)} m`, canvas.width / 20, canvas.height / 10);
 }
 
 function drawGameOver() {
