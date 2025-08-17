@@ -1,19 +1,20 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const player = document.getElementById("player");
 
 // ゲーム設定
 const PLAYER_WIDTH = 50;
 const PLAYER_HEIGHT = 50;
 const PLAYER_COLOR = 'red';
-const PLAYER_X = canvas.width / 3;
-let playerY = canvas.height - PLAYER_HEIGHT;
+const PLAYER_X = canvas.width * 2 / 5;
+let PLAYER_Y = canvas.height - PLAYER_HEIGHT;
 let playerVelocityY = 0;
 
 const GRAVITY = 0.8;
-const JUMP_POWER = -15;
+const JUMP_POWER = -20;
 let isJumping = false;
 
-const OBSTACLE_WIDTH = 30;
+const OBSTACLE_WIDTH = 20;
 const OBSTACLE_COLOR = 'green';
 const OBSTACLE_SPAWN_RATE_MIN = 1000; // ms
 const OBSTACLE_SPAWN_RATE_MAX = 2500; // ms
@@ -30,18 +31,19 @@ let lastTime = 0;
 
 // --- プレイヤー --- //
 function drawPlayer() {
-    ctx.fillStyle = PLAYER_COLOR;
-    ctx.fillRect(PLAYER_X, playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
+    //ctx.fillStyle = PLAYER_COLOR;
+    //ctx.fillRect(PLAYER_X, PLAYER_Y, PLAYER_WIDTH, PLAYER_HEIGHT);
+    ctx.drawImage(player, PLAYER_X, PLAYER_Y);
 }
 
 function updatePlayer(deltaTime) {
     if (isJumping) {
         playerVelocityY += GRAVITY;
-        playerY += playerVelocityY;
+        PLAYER_Y += playerVelocityY;
 
         // 着地
-        if (playerY >= canvas.height - PLAYER_HEIGHT) {
-            playerY = canvas.height - PLAYER_HEIGHT;
+        if (PLAYER_Y >= canvas.height - PLAYER_HEIGHT) {
+            PLAYER_Y = canvas.height - PLAYER_HEIGHT;
             playerVelocityY = 0;
             isJumping = false;
         }
@@ -57,7 +59,7 @@ function jump() {
 
 // --- 障害物 --- //
 function spawnObstacle() {
-    const obstacleHeight = Math.random() * 60 + 20; // 20pxから80pxの高さ
+    const obstacleHeight = Math.random() * 50 + 20; // 20pxから80pxの高さ
     obstacles.push({
         x: canvas.width,
         y: canvas.height - obstacleHeight,
@@ -100,7 +102,7 @@ function drawBackground() {
 
 // --- ゲームロジック --- //
 function checkCollision() {
-    const player = { x: PLAYER_X, y: playerY, width: PLAYER_WIDTH, height: PLAYER_HEIGHT };
+    const player = { x: PLAYER_X, y: PLAYER_Y, width: PLAYER_WIDTH, height: PLAYER_HEIGHT };
     for (const obstacle of obstacles) {
         if (
             player.x < obstacle.x + obstacle.width &&
@@ -141,7 +143,7 @@ function drawGameOver() {
 }
 
 function resetGame() {
-    playerY = canvas.height - PLAYER_HEIGHT;
+    PLAYER_Y = canvas.height - PLAYER_HEIGHT;
     playerVelocityY = 0;
     isJumping = false;
     obstacles = [];
