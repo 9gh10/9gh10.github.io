@@ -9,7 +9,9 @@ export default class ObstacleManager {
 
         this.obstacles = [];
         this.availableObstacleImages = [
-            assetManager.getAsset('obstacleRock')
+            assetManager.getAsset('obstacleRock1'),
+            assetManager.getAsset('obstacleRock2'),
+            assetManager.getAsset('obstacleRock3'),
             // 他の障害物アセットがあればここに追加
         ];
 
@@ -35,6 +37,10 @@ export default class ObstacleManager {
 
     draw(renderer) {
         this.obstacles.forEach(obstacle => obstacle.draw(renderer));
+    }
+
+    drawBounds(renderer) {
+        this.obstacles.forEach(obstacle => obstacle.drawBounds(renderer));
     }
 
     generateObstacle() {

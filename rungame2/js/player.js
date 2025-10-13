@@ -70,6 +70,12 @@ export default class Player {
         renderer.drawImage(imageToDraw, this.x, this.y);
     }
 
+    drawBounds(renderer) {
+        const bounds = this.getBounds();
+        // 半透明の青い四角形で当たり判定を描画
+        renderer.drawRectangle(bounds.x, bounds.y, bounds.width, bounds.height, 'rgba(0, 0, 255, 0.5)');
+    }
+
     jump() {
         if (!this.isJumping) {
             this.isJumping = true;
@@ -79,12 +85,13 @@ export default class Player {
 
     getBounds() {
         // 当たり判定を少し小さく調整
-        const padding = 5;
+        const xpadding = 25;
+        const ypadding = 5;
         return {
-            x: this.x + padding,
-            y: this.y + padding,
-            width: this.width - padding * 2,
-            height: this.height - padding * 2
+            x: this.x + xpadding,
+            y: this.y + ypadding,
+            width: this.width - xpadding * 2,
+            height: this.height - ypadding * 2
         };
     }
 }

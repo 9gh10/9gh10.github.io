@@ -18,6 +18,12 @@ export default class Obstacle {
         renderer.drawImage(this.image, this.x, this.y);
     }
 
+    drawBounds(renderer) {
+        const bounds = this.getBounds();
+        // 半透明の赤い四角形で当たり判定を描画
+        renderer.drawRectangle(bounds.x, bounds.y, bounds.width, bounds.height, 'rgba(255, 0, 0, 0.5)');
+    }
+
     isOffscreen() {
         return this.x + this.width < 0;
     }
